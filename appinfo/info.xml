@@ -2,25 +2,27 @@
 <info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
     <id>hex</id>
-    <name>Hex &amp; Markdown Viewer</name>
-    <summary>Preview binary files as hex and read Markdown files inside Nextcloud</summary>
+    <name>Nextcloud Text &amp; Hex Editor</name>
+    <summary>Edit text files and inspect binary files as hex inside Nextcloud</summary>
     <description><![CDATA[
-# Hex & Markdown Viewer
+# Nextcloud Text & Hex Editor
 
-A lightweight Nextcloud app scaffold for two useful file preview modes.
+A lightweight Nextcloud editor for text-like files with read-only hex previews for binary files.
 
 ## Features
 
-- Preview binary files as hexadecimal rows
-- Show ASCII text next to hex bytes
-- Read Markdown documents directly in Nextcloud
-- Minimal installable app structure, ready for GitHub publishing
+- Edit text-like files directly in Nextcloud
+- Preview binary files as hexadecimal rows with ASCII text
+- Read and edit Markdown documents directly in Nextcloud
+- Integrated file action for unknown and text-like file types
+- Switch between Text and Hex modes
+- Warn before discarding unsaved changes
 
 ## Notes
 
-This is a starter app scaffold intended for local installation and further development.
+This app is intended for local Nextcloud file editing and hex inspection. Binary hex editing is not implemented.
 	]]></description>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <licence>AGPL-3.0-or-later</licence>
     <author mail="admin@dbase.in.rs">dbase.in.rs</author>
     <namespace>Hex</namespace>

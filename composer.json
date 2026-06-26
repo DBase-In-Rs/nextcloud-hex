@@ -1,6 +1,6 @@
 {
   "name": "DBase-In-Rs/nextcloud-hex",
-  "description": "Hex and Markdown viewer app for Nextcloud",
+  "description": "Text editor and hex preview app for Nextcloud",
   "type": "project",
   "license": "AGPL-3.0-or-later",
   "require": {

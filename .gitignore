@@ -1,0 +1,10 @@
+/vendor/
+/node_modules/
+/.phpunit.result.cache
+/coverage/
+/build/
+/dist/
+/*.tar.gz
+/*.zip
+/.DS_Store
+Thumbs.db

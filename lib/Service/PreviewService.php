@@ -9,7 +9,7 @@ use OCP\Files\IRootFolder;
 use OCP\IUserSession;
 
 class PreviewService {
-	private const MAX_BYTES = 262144;
+	private const MAX_BYTES = 1048576;
 
 	public function __construct(
 		private IRootFolder $rootFolder,
@@ -27,6 +27,18 @@ class PreviewService {
 		$fileName = $file->getName();
 		$resolvedMode = $this->resolveMode($mode, $fileName, $mimeType);
 		[$content, $truncated] = $this->readFileChunk($file, self::MAX_BYTES);
+		if ($this->isEncryptedPayload($content)) {
+			return [
+				"fileId" => $fileId,
+				"name" => $fileName,
+				"mime" => $mimeType,
+				"size" => $file->getSize(),
+				"mode" => "encrypted",
+				"editable" => false,
+				"truncated" => $truncated,
+				"message" => "This file still contains a Nextcloud encryption header. Hex cannot decrypt raw encrypted storage data.",
+			];
+		}
 
 		$result = [
 			'fileId' => $fileId,
@@ -35,6 +47,8 @@ class PreviewService {
 			'size' => $file->getSize(),
 			'mode' => $resolvedMode,
 			'truncated' => $truncated,
+			'textLike' => $this->isTextLike($fileName, $mimeType),
+			'editable' => in_array($resolvedMode, ['text', 'md'], true) && !$truncated,
 		];
 
 		if ($resolvedMode === 'md') {
@@ -51,6 +65,31 @@ class PreviewService {
 
 		$result['hex'] = $this->formatHex($content);
 		return $result;
+	}
+
+	public function saveText(int $fileId, string $content): array {
+		if ($fileId <= 0) {
+			throw new \InvalidArgumentException("Invalid file id");
+		}
+
+		$file = $this->getFileById($fileId);
+		$fileName = $file->getName();
+		$mimeType = $file->getMimeType();
+		if (!$this->isTextLike($fileName, $mimeType) && !mb_check_encoding($content, 'UTF-8')) {
+			throw new \InvalidArgumentException("Only text-like UTF-8 files can be saved from this editor");
+		}
+
+		if ($this->isEncryptedPayload($content)) {
+			throw new \InvalidArgumentException("Refusing to save raw Nextcloud encrypted payload");
+		}
+
+		$file->putContent($content);
+		return [
+			"fileId" => $fileId,
+			"name" => $fileName,
+			"size" => $file->getSize(),
+			"saved" => true,
+		];
 	}
 
 	private function getFileById(int $fileId): File {
@@ -105,7 +144,6 @@ class PreviewService {
 			'application/x-yaml',
 			'application/toml',
 			'application/x-powershell',
-			'application/octet-stream',
 		];
 
 		$knownTextExtensions = [
@@ -114,7 +152,7 @@ class PreviewService {
 			'php', 'js', 'ts', 'jsx', 'tsx', 'py', 'rb', 'pl', 'java', 'c', 'cc', 'cpp', 'h',
 			'hpp', 'cs', 'go', 'rs', 'swift', 'kt', 'kts', 'scala', 'lua', 'r', 'bat', 'cmd',
 			'properties', 'gradle', 'make', 'mk', 'dockerfile', 'gitignore', 'editorconfig',
-			'md', 'markdown', 'html', 'css', 'scss', 'less', 'svg', 'tex',
+			'md', 'markdown', 'html', 'css', 'scss', 'less', 'svg', 'tex', 'asc', 'pem', 'pub', 'key', 'priv', 'private', 'crt', 'cer', 'csr',
 		];
 
 		$extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
@@ -123,6 +161,10 @@ class PreviewService {
 		}
 
 		return in_array($mimeType, $knownTextMimes, true);
+	}
+
+	private function isEncryptedPayload(string $content): bool {
+		return str_starts_with($content, "HBEGIN:oc_encryption_module:");
 	}
 
 	private function readFileChunk(File $file, int $maxBytes): array {

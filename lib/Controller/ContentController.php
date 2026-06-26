@@ -34,4 +34,19 @@ class ContentController extends Controller {
 			return new DataResponse(['message' => 'Unable to load file preview'], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
+	/**
+	 * @NoAdminRequired
+	 */
+	public function save(int $fileId): DataResponse {
+		try {
+			$content = (string)$this->request->getParam("content", "");
+			return new DataResponse($this->previewService->saveText($fileId, $content));
+		} catch (\InvalidArgumentException $e) {
+			return new DataResponse(["message" => $e->getMessage()], Http::STATUS_BAD_REQUEST);
+		} catch (\RuntimeException $e) {
+			return new DataResponse(["message" => $e->getMessage()], Http::STATUS_NOT_FOUND);
+		} catch (\Throwable) {
+			return new DataResponse(["message" => "Unable to save file"], Http::STATUS_INTERNAL_SERVER_ERROR);
+		}
+	}
 }
