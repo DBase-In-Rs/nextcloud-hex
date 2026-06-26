@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>hex</id>
+    <name>Hex &amp; Markdown Viewer</name>
+    <summary>Preview binary files as hex and read Markdown files inside Nextcloud</summary>
+    <description><![CDATA[
+# Hex & Markdown Viewer
+
+A lightweight Nextcloud app scaffold for two useful file preview modes.
+
+## Features
+
+- Preview binary files as hexadecimal rows
+- Show ASCII text next to hex bytes
+- Read Markdown documents directly in Nextcloud
+- Minimal installable app structure, ready for GitHub publishing
+
+## Notes
+
+This is a starter app scaffold intended for local installation and further development.
+	]]></description>
+    <version>0.1.0</version>
+    <licence>AGPL-3.0-or-later</licence>
+    <author mail="admin@dbase.in.rs">dbase.in.rs</author>
+    <namespace>Hex</namespace>
+    <category>files</category>
+    <category>office</category>
+    <category>tools</category>
+    <website>https://github.com/DBase-In-Rs/nextcloud-hex</website>
+    <bugs>https://github.com/DBase-In-Rs/nextcloud-hex/issues</bugs>
+    <repository type="git">https://github.com/DBase-In-Rs/nextcloud-hex.git</repository>
+    <dependencies>
+        <nextcloud min-version="34" max-version="34"/>
+    </dependencies>
+</info>

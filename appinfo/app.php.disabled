@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+use OCA\Hex\AppInfo\Application;
+
+require_once __DIR__ . '/../lib/AppInfo/Application.php';
+require_once __DIR__ . '/../lib/Listener/LoadAdditionalScripts.php';
+
+(new Application());

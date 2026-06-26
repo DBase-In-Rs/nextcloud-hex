@@ -1,0 +1,21 @@
+{
+  "name": "DBase-In-Rs/nextcloud-hex",
+  "description": "Hex and Markdown viewer app for Nextcloud",
+  "type": "project",
+  "license": "AGPL-3.0-or-later",
+  "require": {
+    "php": "^8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "OCA\\Hex\\": "lib/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "platform": {
+      "php": "8.2"
+    }
+  }
+}
